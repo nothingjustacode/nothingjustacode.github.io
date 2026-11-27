@@ -1,11 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import software from '../data/software';
 
-const software = (await getCollection('software')).sort(
-  (a, b) => a.data.order - b.data.order
-);
-const totalReleases = software.reduce((sum, s) => sum + s.data.changelog.length, 0);
+const sortedSoftware = [...software].sort((a, b) => a.order - b.order);
+const totalReleases = software.reduce((sum, s) => sum + s.changelog.length, 0);
 const base = import.meta.env.BASE_URL;
 ---
 
@@ -55,15 +53,15 @@ const base = import.meta.env.BASE_URL;
       </div>
       <div class="software-list">
         {
-          software.map((s, i) => (
+          sortedSoftware.map((s, i) => (
             <a class="software-item reveal" href={`${base}software/${s.id}/`}>
               <span class="software-number">{String(i + 1).padStart(3, '0')}</span>
               <div class="software-info">
-                <h3>{s.data.title}</h3>
-                <p>{s.data.tagline}</p>
+                <h3>{s.title}</h3>
+                <p>{s.tagline}</p>
               </div>
-              <span class="software-category">{s.data.category}</span>
-              <span class="software-version">v{s.data.version}</span>
+              <span class="software-category">{s.category}</span>
+              <span class="software-version">v{s.version}</span>
               <span class="software-arrow">→</span>
             </a>
           ))

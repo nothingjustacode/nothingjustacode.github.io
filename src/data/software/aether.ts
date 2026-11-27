@@ -1,6 +1,5 @@
-import { defineSoftware } from '../../content.config';
-
-export default defineSoftware({
+export default {
+  id: 'aether',
   order: 1,
   title: 'Aether',
   tagline: 'Download manager that bonds multiple network connections for maximum speed',
@@ -12,7 +11,7 @@ export default defineSoftware({
   downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aether-Download-Manager/releases/latest',
   docsUrl: 'https://github.com/Nothing-Just-a-Code/Aether-Download-Manager/wiki',
   featured: true,
-  screenshots : [
+  screenshots: [
     {
       src: './aether-1.png',
       alt: 'Main Interface showing active downloads and bonded network adapters',
@@ -59,6 +58,8 @@ export default defineSoftware({
         'Pause and resume support',
         'Live throughput statistics',
       ],
+      improved: [],
+      fixed: [],
     },
   ],
-});
+};

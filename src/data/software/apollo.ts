@@ -1,6 +1,5 @@
-import { defineSoftware } from '../../content.config';
-
-export default defineSoftware({
+export default {
+  id: 'apollo',
   order: 2,
   title: 'Apollo',
   tagline: 'Modern high-fidelity music player for Windows',
@@ -77,6 +76,8 @@ export default defineSoftware({
       date: '2026-11-18',
       title: 'Bug fixes and stability improvements',
       downloadUrl: 'https://github.com/Nothing-Just-a-Code/Apollo/releases/tag/v1.0.1',
+      added: [],
+      improved: [],
       fixed: [
         'Song playback issue where next track started randomly instead of actual next song',
         'Pause button not changing to Play when song ended',
@@ -101,6 +102,8 @@ export default defineSoftware({
         'System media transport controls',
         'Smart file association',
       ],
+      improved: [],
+      fixed: [],
     },
   ],
-});
+};
