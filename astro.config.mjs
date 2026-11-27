@@ -7,7 +7,7 @@ const BASE = '/';
 export default defineConfig({
   site: `https://${USERNAME}.github.io`,
   base: BASE,
-  output: 'static',          // pure HTML/CSS/JS — GitHub Pages compatible
+  output: 'static',
   compressHTML: true,
-  integrations: [sitemap()], // generates sitemap-index.xml at build
+  integrations: [sitemap()], 
 });
