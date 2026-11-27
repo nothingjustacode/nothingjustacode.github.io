@@ -1,0 +1,204 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const path = Astro.url.pathname.replace(base, '').replace(/\/+$/, '');
+const current =
+  path === '' || path === 'index'
+    ? 'home'
+    : path.split('/')[0] === 'software'
+      ? 'softwares'
+      : path;
+
+const nav = [
+  { href: base, label: 'Index', key: 'home' },
+  { href: `${base}softwares/`, label: 'Software', key: 'softwares' },
+  { href: `${base}about/`, label: 'About', key: 'about' },
+  { href: `${base}contact/`, label: 'Contact', key: 'contact' },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="icon" type="image/png" href={`${base}favicon.png`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.url} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav>
+      <div class="nav-inner">
+        <a class="logo" href={base} aria-label="NJAC — Home">
+  <img src={`${base}logo.png`} alt="NJAC" />
+</a>
+        <div class="nav-links">
+          {nav.map((item) => (
+            <a href={item.href} class:list={['nav-link', { current: current === item.key }]}>
+              {item.label}
+            </a>
+          ))}
+        </div>
+        <a class="nav-cta" href={`${base}softwares/`}><span>View Work</span></a>
+        <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobile-menu">
+      {nav.map((item) => (
+        <a href={item.href} class:list={['mobile-link', { current: current === item.key }]}>
+          {item.label}
+        </a>
+      ))}
+    </div>
+
+    <main class="page">
+      <slot />
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-text">
+              <strong>NJAC — Nothing Just A Code</strong>
+              Independent software studio building desktop applications with precision and intention.
+            </div>
+          </div>
+          <div class="footer-links">
+            <h4>Navigation</h4>
+            <ul>
+              {nav.map((item) => (
+                <li><a href={item.href}>{item.label}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href={`${base}softwares/`}>Downloads</a></li>
+              <li><a href="https://github.com/njac" target="_blank" rel="noopener">GitHub</a></li>
+              <li><a href={`${base}contact/`}>Support</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© {new Date().getFullYear()} NJAC. All rights reserved.</span>
+          <span>Nothing Just A Code.</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector('.nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+
+      toggle.addEventListener('click', () => {
+        const open = menu.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+
+      menu.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          menu.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      document.querySelectorAll('.reveal').forEach((el) => {
+        const siblings = Array.from(el.parentElement.children).filter((c) =>
+          c.classList.contains('reveal')
+        );
+        el.style.transitionDelay = `${Math.min(siblings.indexOf(el) * 60, 300)}ms`;
+        io.observe(el);
+      });
+    </script>
+
+    <style>
+      .nav-toggle {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+      }
+      .nav-toggle span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--black);
+        margin: 5px auto;
+        transition: transform 0.3s var(--ease);
+      }
+      .nav-toggle[aria-expanded='true'] span:first-child {
+        transform: translateY(3.5px) rotate(45deg);
+      }
+      .nav-toggle[aria-expanded='true'] span:last-child {
+        transform: translateY(-3.5px) rotate(-45deg);
+      }
+      .mobile-menu {
+        position: fixed;
+        top: 65px;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        background: var(--white);
+        border-bottom: var(--border);
+        padding: 1.5rem 2rem 2rem;
+        display: none;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+      .mobile-menu.open { display: flex; }
+      .mobile-link {
+        text-decoration: none;
+        font-size: 1.125rem;
+        font-weight: 500;
+        color: var(--gray-3);
+      }
+      .mobile-link.current { color: var(--black); }
+      @media (min-width: 769px) {
+        .nav-toggle, .mobile-menu { display: none !important; }
+      }
+      @media (max-width: 768px) {
+        .nav-toggle { display: block; }
+        .nav-cta { display: none; }
+      }
+    </style>
+  </body>
+</html>

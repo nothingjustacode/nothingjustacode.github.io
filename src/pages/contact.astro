@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contact — NJAC"
+  description="Questions, feedback, or collaboration. Get in touch with NJAC."
+>
+  <div class="container">
+    <section class="contact-section">
+      <div class="section-header">
+        <h2>Contact</h2>
+        <p>Questions, feedback, or collaboration. Messages go straight to our inbox — we read everything.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div>
+          <div class="contact-info">
+            <a class="contact-item reveal" href="mailto:contact@njac.dev">
+              <span class="label">Email</span>
+              <span class="value">contact@njac.dev</span>
+            </a>
+            <a class="contact-item reveal" href="https://github.com/Nothing-Just-A-Code" target="_blank" rel="noopener">
+              <span class="label">GitHub</span>
+              <span class="value">github.com/Nothing-Just-A-Code</span>
+            </a>
+            <a class="contact-item reveal" href="https://discord.gg/njac" target="_blank" rel="noopener">
+              <span class="label">Discord</span>
+              <span class="value">discord.gg/njac</span>
+            </a>
+          </div>
+          <p class="response-note mono">Typical response time — 48 hours</p>
+        </div>
+
+        <div>
+          <form id="contact-form" novalidate>
+            <div class="form-group">
+              <label for="cf-name">Name</label>
+              <input id="cf-name" name="name" type="text" required autocomplete="name" />
+            </div>
+            <div class="form-group">
+              <label for="cf-email">Email</label>
+              <input id="cf-email" name="email" type="email" required autocomplete="email" />
+            </div>
+            <div class="form-group">
+              <label for="cf-subject">Subject</label>
+              <select id="cf-subject" name="subject">
+                <option>General Inquiry</option>
+                <option>Bug Report</option>
+                <option>Feature Request</option>
+                <option>Collaboration</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message" required></textarea>
+            </div>
+            <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <button type="submit" class="btn btn-primary" id="cf-submit">Send Message</button>
+            <p id="cf-status" class="form-status mono" role="status" aria-live="polite"></p>
+          </form>
+
+          <div id="cf-success" class="success-panel" hidden>
+            <span class="mono success-tag">Delivered</span>
+            <h3>Message sent.</h3>
+            <p>Thanks for reaching out — we'll get back to you within 48 hours.</p>
+            <button type="button" class="btn btn-secondary" id="cf-again">Send another</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const ACCESS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY;
+
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('cf-submit');
+    const status = document.getElementById('cf-status');
+    const successPanel = document.getElementById('cf-success');
+    const againBtn = document.getElementById('cf-again');
+    let sending = false;
+
+    const setStatus = (text, kind) => {
+      status.textContent = text;
+      if (kind) status.dataset.kind = kind;
+      else delete status.dataset.kind;
+    };
+
+    const validate = () => {
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+      if (!name || !email || !message) return 'Please fill in your name, email, and message.';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'That email address doesn\u2019t look right.';
+      if (message.length < 10) return 'Give us a little more detail (10+ characters).';
+      return null;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (sending) return;
+
+      const error = validate();
+      if (error) {
+        setStatus(error, 'error');
+        return;
+      }
+
+      if (!ACCESS_KEY) {
+        setStatus('Contact form is not configured on this deployment.', 'error');
+        return;
+      }
+
+      sending = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending\u2026';
+      setStatus('', '');
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: ACCESS_KEY,
+            subject: `[NJAC] ${form.subject.value} — from ${form.name.value.trim()}`,
+            name: form.name.value.trim(),
+            email: form.email.value.trim(),
+            message: form.message.value.trim(),
+            from_name: 'NJAC Website',
+            botcheck: form.botcheck.checked,
+          }),
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          form.reset();
+          form.hidden = true;
+          successPanel.hidden = false;
+        } else {
+          setStatus(data.message || 'Something went wrong. Please try again.', 'error');
+        }
+      } catch {
+        setStatus('Network error — check your connection and try again.', 'error');
+      } finally {
+        sending = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
+    });
+
+    againBtn.addEventListener('click', () => {
+      successPanel.hidden = true;
+      form.hidden = false;
+      setStatus('', '');
+      form.name.focus();
+    });
+  </script>
+</BaseLayout>

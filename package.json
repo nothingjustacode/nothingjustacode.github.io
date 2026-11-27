@@ -1,0 +1,20 @@
+{
+  "name": "njac-website",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "@astrojs/sitemap": "^3.0.0"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "sharp@0.34.5": true
+  }
+}

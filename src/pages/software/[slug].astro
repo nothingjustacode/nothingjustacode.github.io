@@ -1,0 +1,189 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const software = await getCollection('software');
+  return software.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+const base = import.meta.env.BASE_URL;
+const releases = [...d.changelog].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+const fmt = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' });
+const changeCount = (r) => r.added.length + r.improved.length + r.fixed.length;
+---
+
+<BaseLayout title={`${d.title} — NJAC`} description={d.tagline}>
+  <div class="container">
+    <header class="detail-header">
+      <a class="btn btn-secondary back-link" href={`${base}softwares/`}>← Back to Index</a>
+      <div class="detail-grid">
+        <div>
+          <div class="detail-meta">
+            <div class="meta-item"><strong>Version</strong>v{d.version}</div>
+            <div class="meta-item"><strong>Platform</strong>Windows</div>
+            <div class="meta-item"><strong>Price</strong>Free</div>
+          </div>
+          <h2>{d.title}</h2>
+        </div>
+        <div>
+          <p class="detail-lede">{d.lede}</p>
+          <div class="detail-actions">
+            <a class="btn btn-primary" href={d.downloadUrl} target="_blank" rel="noopener">Download</a>
+            {
+              d.docsUrl && (
+                <a class="btn btn-secondary" href={d.docsUrl} target="_blank" rel="noopener">
+                  Documentation
+                </a>
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </header>
+
+    {
+      d.screenshots.length > 0 && (
+        <div class="screenshots">
+          {d.screenshots.map((shot) => (
+            <figure>
+              <Image src={shot.src} alt={shot.alt} />
+              <figcaption>{shot.alt}</figcaption>
+            </figure>
+          ))}
+        </div>
+      )
+    }
+
+    <div class="detail-content">
+      <div class="content-grid">
+        <div>
+          <h3 class="content-title">Features</h3>
+          <ul class="feature-list">
+            {d.features.map((f, i) => (
+              <li class="reveal">
+                <span class="feature-number">{String(i + 1).padStart(2, '0')}</span>
+                <div class="feature-content">
+                  <h4>{f.title}</h4>
+                  <p>{f.description}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 class="content-title">Details</h3>
+          <div class="info-panel">
+            <span class="mono">Release Information</span>
+            <ul>
+              <li><span>Latest version</span><span>v{d.version}</span></li>
+              <li><span>First released</span><span>{fmt.format(releases[releases.length - 1].date)}</span></li>
+              <li><span>Last updated</span><span>{fmt.format(releases[0].date)}</span></li>
+              <li><span>Download size</span><span>{d.size}</span></li>
+              <li><span>Requires</span><span>Windows 10 or later</span></li>
+              <li><span>License</span><span>Free</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <section class="changelog">
+        <h3 class="content-title">Changelog</h3>
+        {releases.map((r, i) => {
+          const count = changeCount(r);
+          const collapsed = i > 0;
+          return (
+            <article class="release reveal">
+              <div class="release-head">
+                <span class="release-version">v{r.version}</span>
+                <span class="release-date">{fmt.format(r.date)}</span>
+                {i === 0 && <span class="release-latest">Latest</span>}
+              </div>
+              <h4 class="release-title">{r.title}</h4>
+              <div class:list={['release-body', { collapsed }]}>
+                {r.added.length > 0 && (
+                  <div class="change-group">
+                    <span class="change-label added">Added</span>
+                    <ul>{r.added.map((x) => <li>{x}</li>)}</ul>
+                  </div>
+                )}
+                {r.improved.length > 0 && (
+                  <div class="change-group">
+                    <span class="change-label improved">Improved</span>
+                    <ul>{r.improved.map((x) => <li>{x}</li>)}</ul>
+                  </div>
+                )}
+                {r.fixed.length > 0 && (
+                  <div class="change-group">
+                    <span class="change-label fixed">Fixed</span>
+                    <ul>{r.fixed.map((x) => <li>{x}</li>)}</ul>
+                  </div>
+                )}
+                {r.downloadUrl && (
+                  <a class="mono release-download" href={r.downloadUrl} target="_blank" rel="noopener">
+                    Download this version →
+                  </a>
+                )}
+              </div>
+              {collapsed && (
+                <button
+                  class="release-toggle"
+                  aria-expanded="false"
+                  data-closed={`+ ${count} changes`}
+                  data-open="− hide changes"
+                >
+                  + {count} changes
+                </button>
+              )}
+            </article>
+          );
+        })}
+      </section>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.release-toggle').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const body = btn.closest('.release').querySelector('.release-body');
+        const collapsed = body.classList.toggle('collapsed');
+        btn.setAttribute('aria-expanded', String(!collapsed));
+        btn.textContent = collapsed ? btn.dataset.closed : btn.dataset.open;
+      });
+    });
+  </script>
+
+  <style>
+    .release-download {
+      display: inline-block;
+      margin-top: 0.5rem;
+      color: var(--gray-3);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+    .release-download:hover { color: var(--accent); }
+    .screenshots {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      padding: 3rem 0 0;
+    }
+    .screenshots figure { border: var(--border); }
+    .screenshots img { display: block; width: 100%; height: auto; }
+    .screenshots figcaption {
+      font-size: 0.8125rem;
+      color: var(--gray-3);
+      padding: 0.75rem 1rem;
+      border-top: var(--border);
+    }
+    @media (max-width: 768px) {
+      .screenshots { grid-template-columns: 1fr; }
+    }
+  </style>
+</BaseLayout>

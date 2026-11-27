@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const software = (await getCollection('software')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+const totalReleases = software.reduce((sum, s) => sum + s.data.changelog.length, 0);
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="NJAC — Nothing Just A Code"
+  description="Independent software studio building precise, intentional desktop applications for Windows."
+>
+  <div class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-left">
+          <span class="mono">Independent Software Studio</span>
+          <h1>
+            <span class="line"><span>Nothing</span></span>
+            <span class="line"><span>Just A</span></span>
+            <span class="line"><span>Code.</span></span>
+          </h1>
+        </div>
+        <div class="hero-right">
+          <p>Desktop applications built with precision and intention. Every detail serves a purpose.</p>
+          <p class="sub">Software for Windows, designed for people who expect more from their tools.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href={`${base}softwares/`}>View Software</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="number">{software.length}</span>
+          <span class="label">Applications</span>
+        </div>
+        <div class="stat-item">
+          <span class="number">{totalReleases}</span>
+          <span class="label">Releases Shipped</span>
+        </div>
+        <div class="stat-item">
+          <span class="number">100%</span>
+          <span class="label">Free</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="software-section">
+      <div class="section-header">
+        <h2>Latest<br />Work</h2>
+        <p>Every application exists to solve one problem, properly. Built to be relied on, not just installed.</p>
+      </div>
+      <div class="software-list">
+        {
+          software.map((s, i) => (
+            <a class="software-item reveal" href={`${base}software/${s.id}/`}>
+              <span class="software-number">{String(i + 1).padStart(3, '0')}</span>
+              <div class="software-info">
+                <h3>{s.data.title}</h3>
+                <p>{s.data.tagline}</p>
+              </div>
+              <span class="software-category">{s.data.category}</span>
+              <span class="software-version">v{s.data.version}</span>
+              <span class="software-arrow">→</span>
+            </a>
+          ))
+        }
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-secondary" href={`${base}softwares/`}>Full Index</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
