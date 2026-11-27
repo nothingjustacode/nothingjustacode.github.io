@@ -13,7 +13,7 @@ export default {
   featured: true,
   screenshots: [
     {
-      src: './aether-1.png',
+      src: '/images/screenshots/aether/aether-1.png',
       alt: 'Main Interface showing active downloads and bonded network adapters',
     },
   ],
