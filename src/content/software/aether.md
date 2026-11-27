@@ -23,6 +23,10 @@ features:
     description: Stop downloads without losing progress. Resume anytime, even after network changes or system restarts.
   - title: Browser Integration
     description: One-click capture from Mozilla Firefox. Automatic link detection with smart filtering.
+
+screenshots:
+  - src: ./aether-1.png
+    alt: Aether main interface showing parallel downloads
 changelog:
   - version: 1.0.0
     date: 2026-11-27
