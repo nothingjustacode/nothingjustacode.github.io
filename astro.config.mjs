@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-const USERNAME = 'njac';
+const USERNAME = 'nothingjustacode';
 const BASE = '/';
 
 export default defineConfig({
