@@ -1,0 +1,192 @@
+export default {
+  id: 'aura',
+  order: 3,
+  title: 'Aura File Transfer Manager',
+  tagline: 'Precision file mobility for demanding workflows',
+  lede: 'A modern replacement for the Windows file copier that gives you complete command over every transfer. Pause and resume at will, verify that every byte arrived intact, and resolve file conflicts with clarity—all from a clean, intuitive interface.',
+  category: 'utilities',
+  version: '3.1.0',
+  released: '2026-06-19',
+  size: '71.8 MB',
+  downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/releases/latest',
+  docsUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/wiki',
+  featured: true,
+  screenshots: [
+    {src: '/images/screenshots/aura/593312849-246afcad-009e-436d-91a1-a78adbbbc771.jpg',
+     alt: '',
+    }
+  ],
+  features: [
+    {
+      title: 'Atlas — Content-Addressed Index',
+      description: 'Builds a local index of every file on every drive you have scanned. Before copying, Aura checks if identical content already exists anywhere and skips it with "Already Owned" status. Matches by content hash, not filename.',
+    },
+    {
+      title: 'Delta Copy',
+      description: 'Breaks files into blocks, compares them by hash, and transfers only the blocks that differ. A 50 GB VM image with 500 MB changed copies in 15 seconds instead of 10 minutes. Falls back to normal copy automatically when delta would be slower.',
+    },
+    {
+      title: 'Parallel Transfers',
+      description: 'Move up to ten files simultaneously. Your storage hardware stays fully utilized without freezing your computer.',
+    },
+    {
+      title: 'Three Transfer Modes',
+      description: 'Choose between Normal (standard buffered), Turbo (larger sequential buffers for SSDs), and Extreme (unbuffered Direct I/O for maximum NVMe performance).',
+    },
+    {
+      title: 'Built-in Integrity Checks',
+      description: 'Verifies each copied file with xxHash3 (lightning fast), BLAKE3 (cryptographic, competitive with xxHash3 in speed), or SHA-256 (FIPS-grade). All run directly on the data stream with zero performance compromise.',
+    },
+    {
+      title: 'Self-Healing on Failure',
+      description: 'If a file fails verification, the corrupted copy is deleted immediately and clearly flagged. Your progress bar reflects only the files that truly succeeded.',
+    },
+    {
+      title: 'Informed Conflict Resolution',
+      description: 'When a file name already exists, Aura shows both source and destination details—path, size, modification date. Overwrite, keep existing, or save both with auto-rename. One click. Apply to All for batch handling.',
+    },
+    {
+      title: 'Pause, Resume, Cancel Cleanly',
+      description: 'Pause any transfer without affecting others. Resume when ready—even after system restart. Cancel removes every file and folder created during the job, leaving the destination exactly as it was.',
+    },
+    {
+      title: 'Safe Move Operations',
+      description: 'Cut and paste copies first, verifies if you wish, and only then removes originals. No data lost if something goes wrong mid-transfer.',
+    },
+    {
+      title: 'Seamless Windows Integration',
+      description: 'Press Ctrl+V anywhere in Windows and Aura takes over automatically. Right-click "Paste with Aura" in folder context menus. Detects copy vs. cut from clipboard and performs the correct operation.',
+    },
+    {
+      title: 'Live Progress Tracking',
+      description: 'Auto-resizing panel shows individual progress bars for each file being transferred simultaneously. Bars disappear when files finish. Overall speed and ETA calculated across the whole transfer with smoothing.',
+    },
+    {
+      title: 'Dedicated Job Windows',
+      description: 'Each transfer opens in its own window with full controls, so you can monitor multiple jobs at once.',
+    },
+    {
+      title: 'Partial File Detection',
+      description: 'If a transfer is interrupted, Aura picks up exactly where it left off next time. No wasted time re-copying data you already moved.',
+    },
+    {
+      title: 'Built-in Diagnostics',
+      description: 'Detailed activity logs keep a rolling record of every job, every file, and every error.',
+    },
+  ],
+  changelog: [
+    {
+      version: '4.0.1-beta',
+      date: '2026-09-28',
+      title: 'Atlas and Delta Copy refinements',
+      downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/releases/tag/4.0.1',
+      added: [],
+      improved: [
+        'Atlas and Delta Copy are opt-in via Settings',
+        'Delta Copy falls back to a full copy automatically when more than 60% of blocks changed',
+        'Atlas operations are best-effort and never fail a transfer',
+      ],
+      fixed: [
+        'Atlas no longer skips files that are still at their source — index previously matched the source file against itself',
+        'Atlas-skipped files now count toward overall progress',
+        'Delta Copy "already up to date" files now count toward progress',
+        'Delta Copy pause is now fully asynchronous',
+        'Null-hash guard in the Atlas database reader — rows with empty hash column no longer throw InvalidCastException',
+      ],
+    },
+    {
+      version: '4.0.0-beta',
+      date: '2026-09-27',
+      title: 'Copy only what changed. Know what you already have.',
+      downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/releases/tag/4.0.0',
+      added: [
+        'Atlas — content-addressed index that builds a local index of every file on every drive you have scanned. Before copying, Aura checks whether identical content already exists anywhere on indexed drives and skips with "Already Owned" status. Matches by content hash, not filename. Runs quietly in the background, pauses automatically during transfers. Fully local.',
+        'Delta Copy — breaks files into blocks, compares them by hash, and transfers only the blocks that differ. A 50 GB VM image with 500 MB changed copies in 15 seconds instead of 10 minutes. Falls back to a normal copy automatically when a delta copy would be slower.',
+      ],
+      improved: [],
+      fixed: [],
+    },
+    {
+      version: '3.1.0',
+      date: '2026-06-19',
+      title: 'BLAKE3, per-file progress, and transfer modes',
+      downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/releases/tag/3.1.0',
+      added: [
+        'BLAKE3 verification — cryptographic security with speeds rivaling xxHash3. Joins Quick (xxHash3) and Full (SHA-256) modes.',
+        'Per-File Progress Panel — auto-resizing panel shows live, individual progress bars for each file being transferred simultaneously. Bars disappear when files finish.',
+        'Three Transfer Modes — Normal (standard buffered), Turbo (larger sequential buffers for SSDs), Extreme (unbuffered Direct I/O for NVMe).',
+        'Cancellation Rollback — cancelling a transfer now completely removes all files and folders created during the job.',
+        'Duplicate file transfer feature to find duplicates even when saved with different names.',
+      ],
+      improved: [
+        'Overall speed and ETA now reflect the entire job, not just the current file.',
+        'Smoothing algorithm prevents displayed speed from jumping wildly during cache flushes.',
+        'Thread-safe speed tracking eliminated a rare race condition in Normal mode.',
+      ],
+      fixed: [
+        'Speed and ETA getting stuck at "Calculating..." or flipping to zero between files.',
+        'Normal mode intermittently missing files during transfers.',
+        'Job cancellation now reliably deletes partially written files and empty directories.',
+        'Main form no longer unexpectedly appears from the tray when a new transfer starts.',
+      ],
+    },
+    {
+      version: '3.0.1',
+      date: '2026-06-04',
+      title: 'Bug fixes',
+      downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/releases/tag/3.0.1',
+      added: [],
+      improved: [],
+      fixed: [
+        'ETA displaying "Calculating..." for small file transfers',
+        'Context menu not working in certain situations',
+        'Application crashed when creating a new Folder Transfer Task',
+      ],
+    },
+    {
+      version: '3.0.0',
+      date: '2026-05-15',
+      title: 'Major rewrite',
+      downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/releases/tag/3.0.0',
+      added: [
+        'Parallel file uploads — up to 10 simultaneously',
+        'Manual buffer size selection',
+        'File verification with xxHash3 (ultra-fast) and SHA-256 (secure)',
+        'Duplicate file dialog showing Filename, Size, File Hash, and Modified Date',
+        'Apply to All option to overwrite, skip, or rename duplicates for a specific transfer job',
+        'Modern Windows 11-style UI',
+        'Right-click "Paste with Aura" inside folders and on directories',
+        'Ctrl+V hotkey integration — redirect Windows file transfer to Aura automatically',
+        '.NET 9 support',
+        'Enable/disable context menu and hotkey detection independently',
+        'Failed files no longer block other files (unless you choose to stop on first error)',
+        'Partial file detection — interrupted transfers resume where they left off',
+      ],
+      improved: [],
+      fixed: [],
+    },
+    {
+      version: '2.0.0',
+      date: '2025-03-24',
+      title: 'Shortcut key support',
+      downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/releases/tag/2.0.0',
+      added: [
+        'Ctrl+Shift+V shortcut key to paste files in any directory',
+      ],
+      improved: [],
+      fixed: [],
+    },
+    {
+      version: '1.0.0',
+      date: '2025-02-28',
+      title: 'Initial release',
+      downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/releases/tag/Release',
+      added: [
+        'Core file transfer engine',
+        'Basic transfer controls',
+      ],
+      improved: [],
+      fixed: [],
+    },
+  ],
+};
