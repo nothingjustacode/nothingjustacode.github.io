@@ -49,7 +49,7 @@ export default {
       version: '1.0.0',
       date: '2026-11-28',
       title: 'Initial release',
-      downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aether-Download-Manager/releases/tag/v1.0.0',
+      downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aether-Download-Manager/releases/tag/1.0.0',
       added: [
         'Multi-adapter bonding engine',
         'Parallel download segments (up to 16)',
