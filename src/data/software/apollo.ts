@@ -10,6 +10,7 @@ export default {
   size: '45 MB',
   downloadUrl: 'https://github.com/Nothing-Just-a-Code/Apollo/releases/latest',
   featured: true,
+  icon: '/images/icons/Apollo.png',
   screenshots: [
     {
       src: '/images/screenshots/apollo/695004006-223d1922-a919-4deb-90d3-6f086465dd2f.png',

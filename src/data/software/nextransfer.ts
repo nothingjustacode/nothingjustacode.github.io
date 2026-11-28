@@ -10,6 +10,7 @@ export default {
   size: '3.86 MB',
   downloadUrl: 'https://github.com/Nothing-Just-a-Code/NexTransfer/releases/latest',
   featured: true,
+  icon: '/images/icons/NTrans.png',
   screenshots: [
     {
       src: '/images/screenshots/nextransfer/screenshot.png',

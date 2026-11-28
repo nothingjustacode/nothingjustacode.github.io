@@ -11,6 +11,7 @@ export default {
   downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aether-Download-Manager/releases/latest',
   docsUrl: 'https://github.com/Nothing-Just-a-Code/Aether-Download-Manager/wiki',
   featured: true,
+  icon: '/images/icons/iAether.png',
   screenshots: [
     {
       src: '/images/screenshots/aether/aether-1.png',

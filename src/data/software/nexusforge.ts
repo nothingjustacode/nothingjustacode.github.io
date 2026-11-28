@@ -11,6 +11,7 @@ export default {
   downloadUrl: 'https://github.com/Nothing-Just-a-Code/NexusForge/releases/latest',
   docsUrl: 'https://njac.shop/products/nexusforge',
   featured: true,
+  icon: '/images/icons/App Icon.png',
   screenshots: [
     {
       src: '/images/screenshots/nexusforge/logo.png',

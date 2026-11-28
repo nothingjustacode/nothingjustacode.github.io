@@ -53,9 +53,13 @@ const base = import.meta.env.BASE_URL;
       </div>
       <div class="software-list">
         {
-          sortedSoftware.map((s, i) => (
+            sortedSoftware.slice(0, 5).map((s, i) => (
             <a class="software-item reveal" href={`${base}software/${s.id}/`}>
-              <span class="software-number">{String(i + 1).padStart(3, '0')}</span>
+              {s.icon ? (
+                <img class="software-icon" src={s.icon} alt="" />
+              ) : (
+                <span class="software-number">{String(i + 1).padStart(3, '0')}</span>
+              )}
               <div class="software-info">
                 <h3>{s.title}</h3>
                 <p>{s.tagline}</p>

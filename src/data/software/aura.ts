@@ -11,6 +11,7 @@ export default {
   downloadUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/releases/latest',
   docsUrl: 'https://github.com/Nothing-Just-a-Code/Aura-File-Transfer-Manager/wiki',
   featured: true,
+  icon: '/images/icons/Aura Icon Png.png',
   screenshots: [
     {src: '/images/screenshots/aura/593312849-246afcad-009e-436d-91a1-a78adbbbc771.jpg',
      alt: '',

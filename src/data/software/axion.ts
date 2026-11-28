@@ -10,6 +10,7 @@ export default {
   size: '65.9 MB',
   downloadUrl: 'https://github.com/Nothing-Just-a-Code/Axion-Downloads-Organizer/releases/latest',
   featured: true,
+  icon: '/images/icons/Axion Logo-P.png',
   screenshots: [
     {
       src: '/images/screenshots/axion/logo.png',

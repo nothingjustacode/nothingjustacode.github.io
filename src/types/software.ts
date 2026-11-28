@@ -1,5 +1,6 @@
 export interface Software {
   id: string;
+  icon?: string;
   order: number;
   title: string;
   tagline: string;
